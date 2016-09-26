@@ -7,17 +7,33 @@
 
 
 
-<h3>A demonstration of how to access a TEXTAREA element</h3>
+<h3>JavaScript Challenge Framework</h3>
 
-Address:<br>
-<textarea id="myTextarea">
-var i = 0;</textarea>
+<textarea id="myTextarea" style="width:640px; height:360px;">
+var bool = true;
+if(bool)
+{
+    var count = 0;
+    for(i = 0; i < 10; i++)
+    {
+        count++;
+    }
+}
+while(count > 0)
+{
+    count--;
+}
+</textarea>
 
-<p>Click the button to get the content of the text area.</p>
+<p></p>
 
-   <button id="myButton">Try it</button>
+   <button id="myButton">Submit</button>
 
-   <p id="demo"></p>
+
+   <p id ="whitelist"></p>
+   <p id ="blacklist"></p>
+   <p id ="structure"></p>
+   <pre id="parsed"></pre>
 
 </body>
 </html>
