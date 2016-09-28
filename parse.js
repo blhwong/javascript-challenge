@@ -1,5 +1,5 @@
 var acorn = require('acorn');
-var walk = require('acorn/dist/walk');
+var walk = require('estree-walker').walk;
 
 var whiteList =
 {
@@ -26,14 +26,32 @@ function getResults()
     //console.log(whiteList, blackList);
     var x = document.getElementById("myTextarea").value;
     var ast = acorn.parse(x);
-    walk.simple(ast, { 
-        Function: function(node){
-            console.log(node, "Function");},
-        Statement: function(node){
-            console.log(node, "Statement");}
+    walk(ast, {
+      enter: function(node, parent)
+      {
+          console.log(node, "node");
+          if(whiteList.hasOwnProperty(node.type))
+          {
+              //console.log("Found White list Item");
+              if(!whiteList[node.type])
+              {
+                  //console.log("Changing to true");
+                  whiteList[node.type] = true;
+              }
+              //console.log(whiteList);
+          }
+          if(blackList.hasOwnProperty(node.type))
+          {
+              //console.log("Found Black list Item");
+              if(!blackList[node.type])
+              {
+                  //console.log("Changing to true");
+                  blackList[node.type] = true;
+              }
+              //console.log(blackList);
+          }
+      }
     });
-    /*
-    traverse(ast.body);
     var whiteListResult = "";
     for(var i in whiteList)
     {
@@ -49,7 +67,11 @@ function getResults()
             }
         }
     }
-    whiteListResult +='.';
+    if(whiteListResult)
+    {
+        whiteListResult +='.';
+    }
+
     document.getElementById("whitelist").innerHTML=whiteListResult;
 
     var blackListResult = "";
@@ -67,12 +89,15 @@ function getResults()
             }
         }
     }
-    blackListResult +='.';
+    if(blackListResult)
+    {
+        blackListResult +='.';
+    }
+
     document.getElementById("blacklist").innerHTML=blackListResult;
-    */
     document.getElementById("parsed").innerHTML=JSON.stringify(ast, null, 2);
 }
-
+/*
 function traverse(array)
 {
     for(var key in array)
@@ -100,7 +125,7 @@ function traverse(array)
         }
     }
 }
-
+*/
 window.onload = function()
 {
     var btn = document.getElementById("myButton");
