@@ -26,8 +26,6 @@ var wantedNodeTypes =
     "VariableDeclaration":true
 }
 
-
-
 function peek(array)
 {
     return array[array.length -1];
@@ -43,104 +41,61 @@ function getResults()
     {
         blackList[j] = false;
     }
-
     var endStack = [];
-    //console.log(whiteList, blackList);
     var x = document.getElementById("myTextarea").value;
     var ast = acorn.parse(x);
     var structureResult = "";
     walk(ast, {
       enter: function(node, parent)
       {
-
           if(!wantedNodeTypes[node.type])
           {
-              //console.log("Returning");
-              //console.log('Returned',node.type);
               return;
           }
-          //console.log(node, endStack, endStack.length, peek(endStack));
-          //console.log(endStack[0]);
           if(whiteList.hasOwnProperty(node.type) && !whiteList[node.type])
           {
-              //console.log("Found White list Item");
-              /*
-              if(!whiteList[node.type])
-              {
-                  //console.log("Changing to true");
-                  whiteList[node.type] = true;
-              }
-              */
               whiteList[node.type] = true;
-              //console.log(whiteList);
           }
           if(blackList.hasOwnProperty(node.type) && !blackList[node.type])
           {
-              //console.log("Found Black list Item");
-              /*
-              if(!blackList[node.type])
-              {
-                  //console.log("Changing to true");
-                  blackList[node.type] = true;
-              }
-              */
               blackList[node.type] = true;
-              //console.log(blackList);
           }
           if(!structureResult)
           {
               structureResult = "This program starts with a " + node.type;
-              //startStack.push(node.start);
               endStack.push([node.end, node.type]);
-              //console.log(peek(startStack), peek(endStack));
           }
           else
           {
-              //console.log(node.start, endStack[0]);
               if(node.start > peek(endStack)[0])
               {
-                  //next
-                  //startStack.pop();
                   while(endStack.length > 0 && node.start > peek(endStack)[0])
                   {
-                      //console.log("before" + peek(endStack));
                       endStack.pop();
-                      //console.log(endStack, endStack.length);
-                      //console.log("after" + peek(endStack));
-                      //console.log(node.start, endStack.length);
                   }
                   if(endStack.length > 0)
                   {
-                      //var top = peek(endStack);
-                      //console.log(endStack, peek(endStack), endStack.length);
                       structureResult += ". Continuing within " + peek(endStack)[1] + ", there is a " + node.type;
                   }
                   else
                   {
                       structureResult += ". Next, there is a " + node.type;
                   }
-
-                  //startStack.push(node.start);
                   endStack.push([node.end, node.type]);
               }
               else
               {
                   //go inside
-                  //console.log(parent.type);
                   if(parent.type == "ForStatement" && node.type == "VariableDeclaration")
                   {
                       return;
                   }
                   structureResult += ", and inside there is a " + node.type;
-                  //startStack.push(node.start);
                   endStack.push([node.end, node.type]);
               }
           }
-
-
       }
     });
-
     if(structureResult)
     {
         structureResult+= '.';
@@ -149,7 +104,6 @@ function getResults()
     {
         structureResult = "This program is empty";
     }
-
     var whiteListResult = "";
     for(var i in whiteList)
     {
@@ -173,9 +127,6 @@ function getResults()
     {
         whiteListResult = "is good."
     }
-
-
-
     var blackListResult = "";
     for(var i in blackList)
     {
