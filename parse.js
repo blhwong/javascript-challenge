@@ -44,7 +44,7 @@ function getResults()
         blackList[j] = false;
     }
 
-    var endStack = new Array();
+    var endStack = [];
     //console.log(whiteList, blackList);
     var x = document.getElementById("myTextarea").value;
     var ast = acorn.parse(x);
@@ -101,10 +101,14 @@ function getResults()
               {
                   //next
                   //startStack.pop();
-                  console.log("before" + peek(endStack));
-                  endStack.pop();
-                  //console.log(endStack, endStack.length);
-                  console.log("after" + peek(endStack));
+                  while(endStack.length > 0 && node.start > peek(endStack)[0])
+                  {
+                      console.log("before" + peek(endStack));
+                      endStack.pop();
+                      //console.log(endStack, endStack.length);
+                      console.log("after" + peek(endStack));
+                      console.log(node.start, endStack.length);
+                  }
                   if(endStack.length > 0)
                   {
                       //var top = peek(endStack);
