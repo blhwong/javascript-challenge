@@ -59,7 +59,7 @@ function getResults()
               //console.log('Returned',node.type);
               return;
           }
-          console.log(node, endStack, endStack.length, peek(endStack));
+          //console.log(node, endStack, endStack.length, peek(endStack));
           //console.log(endStack[0]);
           if(whiteList.hasOwnProperty(node.type) && !whiteList[node.type])
           {
@@ -103,16 +103,16 @@ function getResults()
                   //startStack.pop();
                   while(endStack.length > 0 && node.start > peek(endStack)[0])
                   {
-                      console.log("before" + peek(endStack));
+                      //console.log("before" + peek(endStack));
                       endStack.pop();
                       //console.log(endStack, endStack.length);
-                      console.log("after" + peek(endStack));
-                      console.log(node.start, endStack.length);
+                      //console.log("after" + peek(endStack));
+                      //console.log(node.start, endStack.length);
                   }
                   if(endStack.length > 0)
                   {
                       //var top = peek(endStack);
-                      console.log(endStack, peek(endStack), endStack.length);
+                      //console.log(endStack, peek(endStack), endStack.length);
                       structureResult += ". Continuing within " + peek(endStack)[1] + ", there is a " + node.type;
                   }
                   else
@@ -126,6 +126,11 @@ function getResults()
               else
               {
                   //go inside
+                  //console.log(parent.type);
+                  if(parent.type == "ForStatement" && node.type == "VariableDeclaration")
+                  {
+                      return;
+                  }
                   structureResult += ", and inside there is a " + node.type;
                   //startStack.push(node.start);
                   endStack.push([node.end, node.type]);
@@ -199,35 +204,7 @@ function getResults()
     document.getElementById("structure").innerHTML="3. (Structure) " + structureResult;
     document.getElementById("parsed").innerHTML=JSON.stringify(ast, null, 2);
 }
-/*
-function traverse(array)
-{
-    for(var key in array)
-    {
-        console.log(array[key]);
-        if(whiteList.hasOwnProperty(array[key].type))
-        {
-            //console.log("Found White list Item");
-            if(!whiteList[array[key].type])
-            {
-                //console.log("Changing to true");
-                whiteList[array[key].type] = true;
-            }
-            //console.log(whiteList);
-        }
-        if(blackList.hasOwnProperty(array[key].type))
-        {
-            //console.log("Found Black list Item");
-            if(!blackList[array[key].type])
-            {
-                //console.log("Changing to true");
-                blackList[array[key].type] = true;
-            }
-            //console.log(blackList);
-        }
-    }
-}
-*/
+
 window.onload = function()
 {
     var btn = document.getElementById("myButton");
