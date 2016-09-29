@@ -153,11 +153,21 @@ function getResults()
     document.getElementById("whitelist").innerHTML="1. (Whitelist) " + whiteListResult;
     document.getElementById("blacklist").innerHTML="2. (Blacklist) " + blackListResult;
     document.getElementById("structure").innerHTML="3. (Structure) " + structureResult;
-    document.getElementById("parsed").innerHTML=JSON.stringify(ast, null, 2);
+    //document.getElementById("parsed").innerHTML=JSON.stringify(ast, null, 2);
 }
 
 window.onload = function()
 {
     var btn = document.getElementById("myButton");
     btn.onclick = getResults;
+    var text = document.getElementById('myTextarea');
+
+    var editableCodeMirror = CodeMirror.fromTextArea(text, {
+        mode: "javascript",
+        theme: "default",
+        lineNumbers: true,
+    });
+    editableCodeMirror.on('change', function (cm) {
+        text.value = cm.getValue();
+    });
 }
